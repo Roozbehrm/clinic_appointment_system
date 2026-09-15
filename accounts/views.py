@@ -16,7 +16,7 @@ from .forms import (RegisterForm, QuickRegisterForm, OTPVerifyForm, LoginForm, P
 from .models import User, OTP, Profile
 from .services import issue_otp, find_user_by_identifier, send_new_account_credentials
 from .tasks import send_email_task
-
+from patients.forms import PatientForm
 
 class RegisterView(View):
     template_name = "accounts/register.html"
@@ -137,16 +137,20 @@ class ResendOTPView(View):
     def get(self, request):
         user_id = request.session.get("otp_user_id")
         purpose = request.session.get("otp_purpose")
-        channel = request.GET.get("via", "both")
-        if channel not in ("both", "email"):
-            channel = "both"
+
+        channel = request.GET.get("via", "sms")
+        if channel not in ("sms", "email"):
+            channel = "sms"
+
         if user_id and purpose:
             user = get_object_or_404(User, id=user_id)
             issue_otp(user, purpose, channel=channel)
+
             if channel == "email":
                 messages.info(request, "کد جدید به ایمیل شما ارسال شد.")
             else:
-                messages.info(request, "کد جدید ارسال شد.")
+                messages.info(request, "کد جدید به شماره تلفن شما ارسال شد.")
+
         return redirect("accounts:verify_otp")
 
 
@@ -211,7 +215,7 @@ class OTPLoginRequestView(View):
             if user.is_doctor:
                 messages.error(request, "این حساب متعلق به پزشک است. لطفاً از صفحه‌ی ورود پزشکان اقدام کنید.")
                 return render(request, self.template_name, {"form": form})
-            issue_otp(user, "otp_login")
+            issue_otp(user, "otp_login", channel="sms")
             request.session["otp_user_id"] = user.id
             request.session["otp_purpose"] = "otp_login"
             messages.info(request, "کد یکبار مصرف برای شما ارسال شد.")
@@ -371,7 +375,7 @@ class ResetPasswordWithTokenView(View):
             return redirect("accounts:login")
         return render(request, self.template_name, {"form": form})
 
-from patients.forms import PatientForm
+
 class CompleteProfileView(LoginRequiredMixin, View):
     login_url = "accounts:login"
     template_name = "accounts/complete_profile.html"
@@ -379,8 +383,10 @@ class CompleteProfileView(LoginRequiredMixin, View):
     def get(self, request):
         form = ProfileForm(instance=request.user.profile)
         email_form = EmailChangeForm(user=request.user)
-        patient_form = PatientForm(
-            instance=request.user.profile.patient
+        patient_form = (
+            PatientForm(instance=request.user.profile.patient)
+            if request.user.is_patient
+            else None
         )
 
         return render(
@@ -405,18 +411,18 @@ class CompleteProfileView(LoginRequiredMixin, View):
             user=request.user
         )
 
-        patient_form = PatientForm(
-            request.POST,
-            instance=request.user.profile.patient
+        patient_form = (
+            PatientForm(request.POST, instance=request.user.profile.patient)
+            if request.user.is_patient
+            else None
         )
 
-        if (
-            form.is_valid()
-            and email_form.is_valid()
-            and patient_form.is_valid()
-        ):
+        patient_form_ok = patient_form is None or patient_form.is_valid()
+
+        if form.is_valid() and email_form.is_valid() and patient_form_ok:
             form.save()
-            patient_form.save()
+            if patient_form is not None:
+                patient_form.save()
 
             new_email = email_form.cleaned_data["email"]
 
@@ -463,6 +469,7 @@ class CompleteProfileView(LoginRequiredMixin, View):
             }
         )
 
+    
 class ConfirmEmailChangeView(LoginRequiredMixin, View):
     login_url = "accounts:login"
 

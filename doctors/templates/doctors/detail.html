@@ -22,6 +22,11 @@
     </div>
   </div>
   {% if doctor.bio %}<p class="mt-3">{{ doctor.bio }}</p>{% endif %}
+  {% if doctor.profile.address %}
+    <p class="text-muted small mt-2 mb-0">
+      <i class="bi bi-geo-alt"></i> آدرس مطب: {{ doctor.profile.address }}
+    </p>
+  {% endif %}
 </div>
 
 <div class="card p-4 mb-4">

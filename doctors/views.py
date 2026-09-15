@@ -69,7 +69,7 @@ class DoctorOTPLoginRequestView(View):
                     "این حساب متعلق به پزشک نیست. لطفاً از صفحه‌ی ورود کاربران اقدام کنید.",
                 )
                 return render(request, self.template_name, {"form": form})
-            issue_otp(user, "otp_login")
+            issue_otp(user, "otp_login", channel="sms")
             request.session["otp_user_id"] = user.id
             request.session["otp_purpose"] = "otp_login"
             messages.info(request, "کد یکبار مصرف برای شما ارسال شد.")

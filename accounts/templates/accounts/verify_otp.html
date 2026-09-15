@@ -14,9 +14,11 @@
         <button class="btn btn-primary w-100 mt-3" type="submit">تایید</button>
       </form>
       <form method="get" action="{% url 'accounts:resend_otp' %}" class="mt-2">
+        <input type="hidden" name="via" value="sms">
         <button class="btn btn-link" type="submit">ارسال مجدد کد (پیامک)</button>
       </form>
-      <form method="get" action="{% url 'accounts:resend_otp' %}?via=email" class="mt-1">
+      <form method="get" action="{% url 'accounts:resend_otp' %}" class="mt-1">
+        <input type="hidden" name="via" value="email">
         <button class="btn btn-link btn-sm" type="submit">کد را نگرفتید؟ از طریق ایمیل ارسال شود</button>
       </form>
     </div>

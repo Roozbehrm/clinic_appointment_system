@@ -121,7 +121,6 @@ class EmailChangeForm(forms.Form):
 
 
 class ChangePasswordForm(forms.Form):
-    """تغییر رمز عبور برای کاربر لاگین‌کرده (بیمار یا پزشک) - نه فراموشی رمز."""
     old_password = forms.CharField(label="رمز عبور فعلی", widget=forms.PasswordInput(attrs={"class": "form-control"}))
     new_password = forms.CharField(label="رمز عبور جدید", widget=forms.PasswordInput(attrs={"class": "form-control"}))
     new_password_confirm = forms.CharField(label="تکرار رمز عبور جدید", widget=forms.PasswordInput(attrs={"class": "form-control"}))

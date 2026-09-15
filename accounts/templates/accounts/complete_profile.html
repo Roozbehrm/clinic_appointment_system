@@ -17,6 +17,7 @@
           {{ form.full_name }}
         </div>
 
+        {% if patient_form %}
         <div class="mb-3">
           <label class="form-label">تاریخ تولد</label>
           <div class="row g-2" dir="rtl">
@@ -41,6 +42,7 @@
             <div class="text-danger small mt-1">{{ error }}</div>
           {% endfor %}
         </div>
+        {% endif %}
 
         <div class="mb-3">
           <label class="form-label">تصویر پروفایل</label>
@@ -87,49 +89,53 @@
   var birthYear = document.getElementById("birthYear");
   var birthMonth = document.getElementById("birthMonth");
   var birthDay = document.getElementById("birthDay");
-  var monthNames = [
-    "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور",
-    "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"
-  ];
 
-  for (var year = 1300; year <= 1410; year += 1) {
-    birthYear.add(new Option(year, year));
-  }
-  monthNames.forEach(function (name, index) {
-    birthMonth.add(new Option(name, index + 1));
-  });
 
-  function refreshDays() {
-    var selectedDay = birthDay.value;
-    birthDay.length = 1;
-    var month = Number(birthMonth.value);
-    var maxDay = month === 12 ? 30 : (month > 6 ? 30 : 31);
-    for (var day = 1; day <= maxDay; day += 1) {
-      birthDay.add(new Option(day, day));
+  if (birthInput) {
+    var monthNames = [
+      "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور",
+      "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"
+    ];
+
+    for (var year = 1300; year <= 1410; year += 1) {
+      birthYear.add(new Option(year, year));
     }
-    if (Number(selectedDay) <= maxDay) {
-      birthDay.value = selectedDay;
-    }
-  }
+    monthNames.forEach(function (name, index) {
+      birthMonth.add(new Option(name, index + 1));
+    });
 
-  function updateBirthInput() {
-    if (birthYear.value && birthMonth.value && birthDay.value) {
-      birthInput.value = [birthYear.value, String(birthMonth.value).padStart(2, "0"), String(birthDay.value).padStart(2, "0")].join("/");
-    } else {
-      birthInput.value = "";
-    }
-  }
+    var refreshDays = function () {
+      var selectedDay = birthDay.value;
+      birthDay.length = 1;
+      var month = Number(birthMonth.value);
+      var maxDay = month === 12 ? 30 : (month > 6 ? 30 : 31);
+      for (var day = 1; day <= maxDay; day += 1) {
+        birthDay.add(new Option(day, day));
+      }
+      if (Number(selectedDay) <= maxDay) {
+        birthDay.value = selectedDay;
+      }
+    };
 
-  var existingBirthDate = (birthInput.value || "").replace(/-/g, "/").split("/");
-  if (existingBirthDate.length === 3) {
-    birthYear.value = existingBirthDate[0];
-    birthMonth.value = Number(existingBirthDate[1]);
+    var updateBirthInput = function () {
+      if (birthYear.value && birthMonth.value && birthDay.value) {
+        birthInput.value = [birthYear.value, String(birthMonth.value).padStart(2, "0"), String(birthDay.value).padStart(2, "0")].join("/");
+      } else {
+        birthInput.value = "";
+      }
+    };
+
+    var existingBirthDate = (birthInput.value || "").replace(/-/g, "/").split("/");
+    if (existingBirthDate.length === 3) {
+      birthYear.value = existingBirthDate[0];
+      birthMonth.value = Number(existingBirthDate[1]);
+    }
+    refreshDays();
+    if (existingBirthDate.length === 3) birthDay.value = Number(existingBirthDate[2]);
+    birthYear.addEventListener("change", updateBirthInput);
+    birthMonth.addEventListener("change", function () { refreshDays(); updateBirthInput(); });
+    birthDay.addEventListener("change", updateBirthInput);
   }
-  refreshDays();
-  if (existingBirthDate.length === 3) birthDay.value = Number(existingBirthDate[2]);
-  birthYear.addEventListener("change", updateBirthInput);
-  birthMonth.addEventListener("change", function () { refreshDays(); updateBirthInput(); });
-  birthDay.addEventListener("change", updateBirthInput);
 
   var frame = document.getElementById("avatarFrame");
   var img = document.getElementById("avatarPreviewImg");
@@ -145,8 +151,7 @@
     posY.value = Math.round(yPercent);
   }
 
-  // وقتی کاربر عکس جدید انتخاب می‌کند، همان لحظه پیش‌نمایش را نشان بده
-  // و موقعیت را به حالت وسط (۵۰٪) برگردان.
+
   fileInput.addEventListener("change", function () {
     var file = fileInput.files && fileInput.files[0];
     if (!file) return;
@@ -185,8 +190,6 @@
     e.preventDefault();
     var p = pointFromEvent(e);
     var rect = frame.getBoundingClientRect();
-    // درگ به سمت راست/پایین یعنی object-position باید کم شود تا همان
-    // بخشی که کاربر می‌خواهد زیر انگشت/ماوس بماند.
     var dxPercent = ((p.x - startClientX) / rect.width) * 100;
     var dyPercent = ((p.y - startClientY) / rect.height) * 100;
     setPosition(startX - dxPercent, startY - dyPercent);

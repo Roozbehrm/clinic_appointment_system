@@ -1,5 +1,5 @@
 
-from .base import *  # noqa: F401,F403
+from .base import *
 
 SECRET_KEY = "test-secret-key-not-for-production"
 DEBUG = False
@@ -13,18 +13,18 @@ DATABASES = {
     }
 }
 
-# Password hashing is slow by default; for tests, we use a fast hasher to speed up test execution.
+# password hashing is set to MD5 for faster tests, as security is not a concern in the test environment.
 PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
-# outbox checking is done in tests, so we use the locmem backend for emails and SMS to capture them in memory.
+# outbox for email and sms messages sent during tests, without really sending.
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 DEFAULT_FROM_EMAIL = "test@medapp.local"
 SMS_BACKEND = "sms.backends.locmem.LocmemBackend"
 
-# media files are stored in a temporary directory during tests to avoid cluttering the project directory and to ensure isolation between test runs.
-import tempfile  # noqa: E402
+# media files are stored in a temporary directory during tests to avoid cluttering the project directory with test files.
+import tempfile
 MEDIA_ROOT = tempfile.mkdtemp(prefix="medapp_test_media_")
 
-# Celery tasks are executed synchronously during tests to simplify testing and avoid the need for a running Celery worker or broker.
+# celery settings for testing; tasks are executed eagerly to simplify testing and avoid the need for a running celery worker.
 CELERY_TASK_ALWAYS_EAGER = True
 CELERY_TASK_EAGER_PROPAGATES = True
 
