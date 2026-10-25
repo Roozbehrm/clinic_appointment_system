@@ -1,31 +1,42 @@
 # سیستم نوبت‌دهی آنلاین پزشکان
 
-پروژه‌ی بوت‌کمپ Quera برای مدیریت و رزرو آنلاین نوبت‌های ویزیت پزشکان، با معماری MVT جنگو.
+ برای مدیریت و رزرو آنلاین نوبت‌های ویزیت پزشکان، با معماری MVT جنگو.
 
 نمودار ERD در فایل `ERD.png` موجود است.
 
 ## امکانات
 
-- ثبت‌نام و ورود با شماره تلفن یا ایمیل
-- ورود سریع با کد یکبار مصرف (پیش‌فرض، بدون رمز عبور) یا با رمز عبور، برای بیمار و پزشک
-- ورود با حساب گوگل برای بیماران
-- صفحه‌ی ورود جداگانه برای پزشکان
-- پروفایل کاربری با آواتار قابل‌تنظیم و تاریخ تولد شمسی برای بیماران
-- ساخت حساب پزشک از پنل ادمین، شامل تخصص، شماره نظام پزشکی و هزینه‌ی ویزیت
-- تعریف ساعات کاری پزشک و تولید خودکار نوبت‌های خالی
-- جستجوی پزشک بر اساس نام یا تخصص
-- رزرو و لغو نوبت با کسر و بازگشت خودکار از کیف‌پول
-- ثبت نظر و امتیاز بیمار برای پزشک
-- نمایش تاریخ‌ها به شمسی در تمام صفحات
-- ارسال پیامک با بک‌اند قابل‌تعویض (کنسول، Kavenegar)
-- ارسال ایمیل برای تاییدیه‌ی رزرو، بازیابی رمز عبور و تغییر ایمیل
-- پردازش ناهمگام با Celery برای ارسال پیام‌ها و پاک‌سازی دوره‌ای نوبت‌های منقضی
-- دستور مدیریتی برای ساخت داده‌ی نمونه با Faker
-- تست‌های خودکار با pytest
+🔹 ثبت‌نام و ورود با شماره تلفن یا ایمیل<br>
+🔹 ورود سریع با کد یکبار مصرف (پیش‌فرض، بدون رمز عبور) یا با رمز عبور، برای بیمار و پزشک<br>
+🔹 ورود با حساب گوگل برای بیماران<br>
+🔹 صفحه‌ی ورود جداگانه برای پزشکان<br>
+🔹 پروفایل کاربری با آواتار قابل‌تنظیم و تاریخ تولد شمسی برای بیماران<br>
+🔹 ساخت حساب پزشک از پنل ادمین، شامل تخصص، شماره نظام پزشکی و هزینه‌ی ویزیت<br>
+🔹 تعریف ساعات کاری پزشک و تولید خودکار نوبت‌های خالی<br>
+🔹 جستجوی پزشک بر اساس نام یا تخصص<br>
+🔹 رزرو و لغو نوبت با کسر و بازگشت خودکار از کیف‌پول<br>
+🔹 ثبت نظر و امتیاز بیمار برای پزشک<br>
+🔹 نمایش تاریخ‌ها به شمسی در تمام صفحات<br>
+🔹 ارسال پیامک با بک‌اند قابل‌تعویض (کنسول، Kavenegar)<br>
+🔹 ارسال ایمیل برای تاییدیه‌ی رزرو، بازیابی رمز عبور و تغییر ایمیل<br>
+🔹 پردازش ناهمگام با Celery برای ارسال پیام‌ها و پاک‌سازی دوره‌ای نوبت‌های منقضی<br>
+🔹 دستور مدیریتی برای ساخت داده‌ی نمونه با Faker<br>
+🔹 تست‌های خودکار با pytest<br>
 
 ## پشته‌ی فنی
 
-Django 5.2، PostgreSQL، Redis، Celery، django-allauth، Gunicorn، nginx، WhiteNoise، jdatetime، Bootstrap 5
+<p align="center">
+  <img src="https://img.shields.io/badge/Django-5.2-092E20?style=flat-square&logo=django&logoColor=white" alt="Django">
+  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL">
+  <img src="https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white" alt="Redis">
+  <img src="https://img.shields.io/badge/Celery-37814A?style=flat-square&logo=celery&logoColor=white" alt="Celery">
+  <img src="https://img.shields.io/badge/Gunicorn-499848?style=flat-square&logo=gunicorn&logoColor=white" alt="Gunicorn">
+  <img src="https://img.shields.io/badge/nginx-009639?style=flat-square&logo=nginx&logoColor=white" alt="nginx">
+  <img src="https://img.shields.io/badge/Bootstrap-5-7952B3?style=flat-square&logo=bootstrap&logoColor=white" alt="Bootstrap">
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker">
+  <img src="https://img.shields.io/badge/pytest-0A9EDC?style=flat-square&logo=pytest&logoColor=white" alt="pytest">
+</p>
+<p align="center"><strong>django-allauth · WhiteNoise · jdatetime</strong></p>
 
 ## ساختار اپ‌ها
 
@@ -48,7 +59,7 @@ Django 5.2، PostgreSQL، Redis، Celery، django-allauth، Gunicorn، nginx، W
 - `test.py`: مخصوص اجرای تست‌ها
 - `production.py`: محیط نهایی، PostgreSQL، HTTPS، ایمیل و پیامک واقعی
 
-انتخاب محیط با متغیر `DJANGO_SETTINGS_MODULE` در فایل `.env` انجام می‌شود:
+انتخاب محیط با متغیر `DJANGO_SETTINGS_MODULE` در فایل `env.` انجام می‌شود:
 
 ```
 DJANGO_SETTINGS_MODULE=clinic_appointment_system.settings.dev
@@ -59,7 +70,7 @@ DJANGO_SETTINGS_MODULE=clinic_appointment_system.settings.production
 صورت اجرای بدون Docker و نبود این متغیر، محیط dev فعال می‌شود.
 
 توجه: در تنظیمات production، مقادیر `SECRET_KEY`، `ALLOWED_HOSTS` و اطلاعات
-دیتابیس مقدار پیش‌فرض ندارند و باید در `.env` تعیین شوند.
+دیتابیس مقدار پیش‌فرض ندارند و باید در `env.` تعیین شوند.
 
 ## راه‌اندازی با Docker
 
@@ -105,7 +116,7 @@ celery -A clinic_appointment_system beat -l info
 
 ## متغیرهای محیطی
 
-توضیح کامل متغیرها در فایل `.env.example` آمده است. مهم‌ترین‌ها:
+توضیح کامل متغیرها در فایل `env.example.` آمده است. مهم‌ترین‌ها:
 
 | متغیر | کاربرد |
 |---|---|
@@ -120,9 +131,16 @@ celery -A clinic_appointment_system beat -l info
 ### ورود با گوگل
 
 ۱. در Google Cloud Console یک OAuth Client ID از نوع Web application بسازید.
-۲. آدرس بازگشت را برابر بگذارید با:
-`https://<دامنه‌ی شما>/social-auth/google/login/callback/`
-۳. مقادیر GOOGLE_CLIENT_ID و GOOGLE_CLIENT_SECRET را در `.env` قرار دهید.
+
+۲. آدرس بازگشت (Redirect URI) را در همان صفحه ثبت کنید. مقدار آن این است:
+
+   ```text
+   https://YOUR-DOMAIN/social-auth/google/login/callback/
+   ```
+
+   به‌جای YOUR-DOMAIN دامنه‌ی خودتان را بگذارید.
+
+۳. مقادیر GOOGLE_CLIENT_ID و GOOGLE_CLIENT_SECRET را در فایل `env.` قرار دهید.
 
 ### پیامک
 
@@ -133,7 +151,6 @@ celery -A clinic_appointment_system beat -l info
 | sms.backends.console.ConsoleBackend | توسعه، چاپ در کنسول |
 | sms.backends.locmem.LocmemBackend | تست خودکار |
 | sms.backends.kavenegar.KavenegarBackend | پروداکشن |
-| sms.backends.mellipayamak.MelliPayamakBackend | جایگزین پروداکشن |
 
 برای افزودن پنل جدید، یک فایل مشابه در `sms/backends/` با متد send_message
 ایجاد کنید.
